@@ -11,3 +11,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('register', 'UserController@register');
 Route::post('login', 'UserController@login');
+
+Route::resource('servers', 'ServerController')->only([
+    'index', 'show'
+]);
