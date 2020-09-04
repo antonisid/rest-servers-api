@@ -1,27 +1,41 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Server;
+use App\Services\ServerService;
+use App\Services\ServerServiceInterface;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
 class ServerController extends Controller
 {
     /**
-     * @return Response
+     * @var ServerService
      */
-    public function index(): Response
-    {
+    private $serverService;
 
+    public function __construct(ServerServiceInterface $serverService)
+    {
+        $this->serverService = $serverService;
     }
 
     /**
-     * @param Server $server
-     * @return Response
+     * @return JsonResponse
      */
-    public function show(Server $server): Response
+    public function index(): JsonResponse
     {
+    }
 
+    /**
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function show(int $id): JsonResponse
+    {
+        $server = $this->serverService->getServer($id);
+
+        return response()->json(['items' => $server], Response::HTTP_OK);
     }
 }
