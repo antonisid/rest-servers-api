@@ -18,6 +18,8 @@ class ServerController extends Controller
 
     public function __construct(ServerServiceInterface $serverService)
     {
+        $this->middleware('jwt.auth');
+
         $this->serverService = $serverService;
     }
 
