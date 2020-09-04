@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Tests\Feature;
 
 use App\Server;
+use App\Transformers\ServerTransformer;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
@@ -45,10 +46,16 @@ class ServerControllerTest extends TestCase
             'items' => [
                 'id' => $server->getId(),
                 'model' => $server->getModel(),
-                'hdd' => $server->getHdd(),
-                'hdd_capacity' => $server->getHddCapacity(),
-                'ram' => $server->getRam(),
-                'ram_capacity' => $server->getRamCapacity(),
+                'hdd' => [
+                    'description' => $server->getHdd(),
+                    'capacity' => $server->getHddCapacity(),
+                    'unit' => ServerTransformer::GB_UNIT
+                ],
+                'ram' => [
+                    'description' => $server->getRam(),
+                    'capacity' => $server->getRamCapacity(),
+                    'unit' => ServerTransformer::GB_UNIT
+                ],
                 'location' => $server->getLocation(),
                 'price' => $server->getPrice(),
                 'created_at' => $server->getCreatedAt(),

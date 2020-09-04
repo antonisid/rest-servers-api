@@ -8,6 +8,11 @@ use App\Dtos\ServerDto;
 class ServerTransformer
 {
     /**
+     * @var string
+     */
+    public const GB_UNIT = 'GB';
+
+    /**
      * @param ServerDto $serverDto
      * @return array
      */
@@ -16,10 +21,16 @@ class ServerTransformer
         return [
             'id' => $serverDto->getId(),
             'model' => $serverDto->getModel(),
-            'hdd' => $serverDto->getHdd(),
-            'hdd_capacity' => $serverDto->getHddCapacity(),
-            'ram' => $serverDto->getRam(),
-            'ram_capacity' => $serverDto->getRamCapacity(),
+            'hdd' => [
+                'description' => $serverDto->getHdd(),
+                'capacity' => $serverDto->getHddCapacity(),
+                'unit' => self::GB_UNIT
+            ],
+            'ram' => [
+                'description' => $serverDto->getRam(),
+                'capacity' => $serverDto->getRamCapacity(),
+                'unit' => self::GB_UNIT
+            ],
             'location' => $serverDto->getLocation(),
             'price' => $serverDto->getPrice(),
             'created_at' => $serverDto->getUpdatedAt(),
