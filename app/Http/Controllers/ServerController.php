@@ -18,7 +18,7 @@ class ServerController extends Controller
 
     public function __construct(ServerServiceInterface $serverService)
     {
-        $this->middleware('jwt.auth');
+        //$this->middleware('jwt.auth');
 
         $this->serverService = $serverService;
     }
@@ -26,8 +26,11 @@ class ServerController extends Controller
     /**
      * @return JsonResponse
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
+        $server = $this->serverService->getServers($request->all());
+
+        return response()->json(['items' => $server], Response::HTTP_OK);
     }
 
     /**

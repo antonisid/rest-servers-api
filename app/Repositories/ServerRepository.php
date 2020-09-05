@@ -5,6 +5,7 @@ namespace App\Repositories;
 
 use App\Dtos\ServerDto;
 use App\Server;
+use App\ServerFilter\ServerFilter;
 
 class ServerRepository implements ServerRepositoryInterface
 {
@@ -24,6 +25,25 @@ class ServerRepository implements ServerRepositoryInterface
     public function get(int $id): ServerDto
     {
         return $this->createDto($this->findById($id));
+    }
+
+    /**
+     * @param array $filters
+     * @return array
+     */
+    public function getList(array $filters): array
+    {
+       $query = ServerFilter::applyFilters($filters, $this->server->newQuery());
+
+       $servers = $query->get();
+
+       $serverDtos = [];
+
+       foreach ($servers as $server) {
+           $serverDtos[] = $this->createDto($server);
+       }
+
+       return $serverDtos;
     }
 
     /**

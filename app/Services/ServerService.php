@@ -27,6 +27,16 @@ class ServerService implements ServerServiceInterface
     /**
      * @inheritDoc
      */
+    public function getServers(array $filters): array
+    {
+        $serversDtos = $this->serverRepository->getList($filters);
+
+        return $this->serverTransformer->transformList(...$serversDtos);
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getServer(int $id): array
     {
         $assetDto = $this->serverRepository->get($id);

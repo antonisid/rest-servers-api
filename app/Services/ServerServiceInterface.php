@@ -6,7 +6,13 @@ interface ServerServiceInterface
 {
     /**
      * @param int $id
-     * @return mixed
+     * @return array
      */
     public function getServer(int $id): array;
+
+    /**
+     * @param array $filters
+     * @return array
+     */
+    public function getServers(array $filters): array;
 }

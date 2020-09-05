@@ -11,4 +11,10 @@ interface BaseRepositoryInterface
      * @return ServerDto
      */
     public function get(int $id): ServerDto;
+
+    /**
+     * @param array $filters
+     * @return array
+     */
+    public function getList(array $filters): array;
 }

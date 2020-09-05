@@ -37,4 +37,18 @@ class ServerTransformer
             'updated_at' => $serverDto->getUpdatedAt(),
         ];
     }
+
+    /**
+     * @param ServerDto ...$serverDtos
+     * @return array
+     */
+    public function transformList(ServerDto ...$serverDtos): array
+    {
+        $serverData = [];
+        foreach ($serverDtos as $serverDto) {
+            $serverData[] = $this->transform($serverDto);
+        }
+
+        return $serverData;
+    }
 }

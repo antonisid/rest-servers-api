@@ -6,7 +6,6 @@ namespace Tests\Feature;
 use App\Server;
 use App\Transformers\ServerTransformer;
 use App\User;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Artisan;
@@ -42,7 +41,7 @@ class ServerControllerTest extends TestCase
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->token,
-        ])->json('GET', '/api/assets');
+        ])->json('GET', '/api/servers');
 
         $response->assertStatus(Response::HTTP_OK);
 
