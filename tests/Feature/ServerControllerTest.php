@@ -224,16 +224,16 @@ class ServerControllerTest extends TestCase
     public function testGetServersByRam(): void
     {
         $server = factory(Server::class)->create([
-            'ram' => 8
+            'ram_capacity' => 8
         ]);
 
         $server2 = factory(Server::class)->create([
-            'ram' => 16
+            'ram_capacity' => 16
         ]);
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->token,
-        ])->json('GET', '/api/servers?ram[]=8&ram[]=16&ram[]=24');
+        ])->json('GET', '/api/servers?ram[]=8&ram[]=24&ram[]=32');
 
         $response->assertStatus(Response::HTTP_OK);
 
