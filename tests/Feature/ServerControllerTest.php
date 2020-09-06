@@ -217,4 +217,51 @@ class ServerControllerTest extends TestCase
 
         $this->assertCount(1, $response['items']);
     }
+
+    /**
+     * Test index() (/servers?ram[]=8&ram[]=12)
+     */
+    public function testGetServersByRam(): void
+    {
+        $server = factory(Server::class)->create([
+            'ram' => 8
+        ]);
+
+        $server2 = factory(Server::class)->create([
+            'ram' => 16
+        ]);
+
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $this->token,
+        ])->json('GET', '/api/servers?ram[]=8&ram[]=16&ram[]=24');
+
+        $response->assertStatus(Response::HTTP_OK);
+
+        $response->assertExactJson([
+            'items' => [
+                [
+                    'id' => $server->getId(),
+                    'model' => $server->getModel(),
+                    'hdd' => [
+                        'description' => $server->getHdd(),
+                        'capacity' => $server->getHddCapacity(),
+                        'unit' => ServerTransformer::GB_UNIT
+                    ],
+                    'ram' => [
+                        'description' => $server->getRam(),
+                        'capacity' => $server->getRamCapacity(),
+                        'unit' => ServerTransformer::GB_UNIT
+                    ],
+                    'location' => $server->getLocation(),
+                    'price' => $server->getPrice(),
+                    'created_at' => $server->getCreatedAt(),
+                    'updated_at' => $server->getUpdatedAt()
+                ]
+            ]
+        ]);
+
+        $response = $response->getOriginalContent();
+
+        $this->assertCount(1, $response['items']);
+    }
 }
