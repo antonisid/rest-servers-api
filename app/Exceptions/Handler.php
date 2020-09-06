@@ -2,8 +2,16 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Throwable;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Exceptions\TokenExpiredException;
+use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 
 class Handler extends ExceptionHandler
 {
@@ -29,7 +37,7 @@ class Handler extends ExceptionHandler
     /**
      * Report or log an exception.
      *
-     * @param  \Throwable  $exception
+     * @param \Throwable $exception
      * @return void
      *
      * @throws \Exception
@@ -40,16 +48,46 @@ class Handler extends ExceptionHandler
     }
 
     /**
-     * Render an exception into an HTTP response.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Throwable  $exception
-     * @return \Symfony\Component\HttpFoundation\Response
-     *
-     * @throws \Throwable
+     * @param Request $request
+     * @param Throwable $exception
+     * @return JsonResponse
      */
-    public function render($request, Throwable $exception)
+    public function render($request, Throwable $exception): JsonResponse
     {
-        return parent::render($request, $exception);
+        if ($exception instanceof ModelNotFoundException) {
+            return response()->json([
+                'error' => $exception->getMessage(),
+            ], Response::HTTP_NOT_FOUND);
+        }
+
+        if ($exception instanceof TokenInvalidException) {
+            return response()->json([
+                'error' => $exception->getMessage(),
+            ], Response::HTTP_UNAUTHORIZED);
+        }
+
+        if ($exception instanceof TokenExpiredException) {
+            return response()->json([
+                'error' => $exception->getMessage(),
+            ], Response::HTTP_UNAUTHORIZED);
+        }
+
+        if ($exception instanceof JWTException) {
+            return response()->json([
+                'error' => $exception->getMessage(),
+            ], Response::HTTP_UNAUTHORIZED);
+        }
+
+        if ($exception instanceof UnauthorizedHttpException) {
+            return response()->json([
+                'error' => $exception->getMessage(),
+            ], Response::HTTP_UNAUTHORIZED);
+        }
+
+        if ($exception instanceof \Exception) {
+            return response()->json([
+                'error' => $exception->getMessage(),
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 }
