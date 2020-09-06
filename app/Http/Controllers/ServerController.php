@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\FilterRequest;
 use App\Services\ServerService;
 use App\Services\ServerServiceInterface;
 use Illuminate\Http\Request;
@@ -18,16 +19,16 @@ class ServerController extends Controller
 
     public function __construct(ServerServiceInterface $serverService)
     {
-        $this->middleware('jwt.auth');
+        //$this->middleware('jwt.auth');
 
         $this->serverService = $serverService;
     }
 
     /**
-     * @param Request $request
+     * @param FilterRequest $request
      * @return JsonResponse
      */
-    public function index(Request $request): JsonResponse
+    public function index(FilterRequest $request): JsonResponse
     {
         $server = $this->serverService->getServers($request->all());
 
