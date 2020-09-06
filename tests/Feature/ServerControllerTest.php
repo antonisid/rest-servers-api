@@ -105,22 +105,22 @@ class ServerControllerTest extends TestCase
                     'updated_at' => $server->getUpdatedAt()
                 ],
                 [
-                    'id' => 2,
-                    'model' => $server->getModel(),
+                    'id' => $server2->getId(),
+                    'model' => $server2->getModel(),
                     'hdd' => [
-                        'description' => $server->getHdd(),
-                        'capacity' => $server->getHddCapacity(),
+                        'description' => $server2->getHdd(),
+                        'capacity' => $server2->getHddCapacity(),
                         'unit' => ServerTransformer::GB_UNIT
                     ],
                     'ram' => [
-                        'description' => $server->getRam(),
-                        'capacity' => $server->getRamCapacity(),
+                        'description' => $server2->getRam(),
+                        'capacity' => $server2->getRamCapacity(),
                         'unit' => ServerTransformer::GB_UNIT
                     ],
-                    'location' => 'RotterdamRot-01',
-                    'price' => $server->getPrice(),
-                    'created_at' => $server->getCreatedAt(),
-                    'updated_at' => $server->getUpdatedAt()
+                    'location' => $server2->getLocation(),
+                    'price' => $server2->getPrice(),
+                    'created_at' => $server2->getCreatedAt(),
+                    'updated_at' => $server2->getUpdatedAt()
                 ]
             ]
         ]);
@@ -132,6 +132,7 @@ class ServerControllerTest extends TestCase
     public function testGetServersByLocation(): void
     {
         $server = factory(Server::class)->create();
+
         $server2 = factory(Server::class)->create([
             'location' => 'RotterdamRot-01'
         ]);
@@ -139,6 +140,53 @@ class ServerControllerTest extends TestCase
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->token,
         ])->json('GET', '/api/servers?location=RotterdamRot-01');
+
+        $response->assertStatus(Response::HTTP_OK);
+
+        $response->assertExactJson([
+            'items' => [
+                [
+                    'id' => $server2->getId(),
+                    'model' => $server2->getModel(),
+                    'hdd' => [
+                        'description' => $server2->getHdd(),
+                        'capacity' => $server2->getHddCapacity(),
+                        'unit' => ServerTransformer::GB_UNIT
+                    ],
+                    'ram' => [
+                        'description' => $server2->getRam(),
+                        'capacity' => $server2->getRamCapacity(),
+                        'unit' => ServerTransformer::GB_UNIT
+                    ],
+                    'location' => $server2->getLocation(),
+                    'price' => $server2->getPrice(),
+                    'created_at' => $server2->getCreatedAt(),
+                    'updated_at' => $server2->getUpdatedAt()
+                ]
+            ]
+        ]);
+
+        $response = $response->getOriginalContent();
+
+        $this->assertCount(1, $response['items']);
+    }
+
+    /**
+     * Test index() (/servers?storage[min]=1000&storage[max]=2000)
+     */
+    public function testGetServersByStorage(): void
+    {
+        $server = factory(Server::class)->create([
+            'hdd_capacity' => 8000
+        ]);
+
+        $server2 = factory(Server::class)->create([
+            'hdd_capacity' => 16000
+        ]);
+
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $this->token,
+        ])->json('GET', '/api/servers?storage[min]=12000&storage[max]=24000');
 
         $response->assertStatus(Response::HTTP_OK);
 
