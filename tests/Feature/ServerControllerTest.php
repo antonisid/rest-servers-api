@@ -264,4 +264,51 @@ class ServerControllerTest extends TestCase
 
         $this->assertCount(1, $response['items']);
     }
+
+    /**
+     * Test index() (/servers?hard_disk_type=sata)
+     */
+    public function testGetServersByHardDiskType(): void
+    {
+        $server = factory(Server::class)->create([
+            'hdd' => '2x2TBSATA2'
+        ]);
+
+        $server2 = factory(Server::class)->create([
+            'hdd' => '4x480GBSSD'
+        ]);
+
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $this->token,
+        ])->json('GET', '/api/servers?hard_disk_type=sata');
+
+        $response->assertStatus(Response::HTTP_OK);
+
+        $response->assertExactJson([
+            'items' => [
+                [
+                    'id' => $server->getId(),
+                    'model' => $server->getModel(),
+                    'hdd' => [
+                        'description' => $server->getHdd(),
+                        'capacity' => $server->getHddCapacity(),
+                        'unit' => ServerTransformer::GB_UNIT
+                    ],
+                    'ram' => [
+                        'description' => $server->getRam(),
+                        'capacity' => $server->getRamCapacity(),
+                        'unit' => ServerTransformer::GB_UNIT
+                    ],
+                    'location' => $server->getLocation(),
+                    'price' => $server->getPrice(),
+                    'created_at' => $server->getCreatedAt(),
+                    'updated_at' => $server->getUpdatedAt()
+                ]
+            ]
+        ]);
+
+        $response = $response->getOriginalContent();
+
+        $this->assertCount(1, $response['items']);
+    }
 }
