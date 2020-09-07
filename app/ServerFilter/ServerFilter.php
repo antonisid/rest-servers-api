@@ -29,7 +29,8 @@ class ServerFilter
     {
         foreach ($filters as $filter => $value) {
 
-            $filterClass = __NAMESPACE__ . '\\Filters\\' . ucfirst($filter);
+            $filterClass = __NAMESPACE__ . '\\Filters\\' . str_replace(' ', '',
+                    ucwords(str_replace('_', ' ', $filter)));
 
             if (class_exists($filterClass)) {
                 /** @var Filter $filterClass */
