@@ -10,6 +10,10 @@ use App\ServerFilter\ServerFilter;
 class ServerRepository implements ServerRepositoryInterface
 {
     /**
+     * @var int
+     */
+    private const PER_PAGE = 10;
+    /**
      * @var Server
      */
     private $server;
@@ -35,7 +39,7 @@ class ServerRepository implements ServerRepositoryInterface
     {
        $query = ServerFilter::applyFilters($filters, $this->server->newQuery());
 
-       $servers = $query->get();
+       $servers = $query->paginate(self::PER_PAGE);
 
        $serverDtos = [];
 

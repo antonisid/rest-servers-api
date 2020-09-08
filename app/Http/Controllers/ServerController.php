@@ -6,7 +6,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\FilterRequest;
 use App\Services\ServerService;
 use App\Services\ServerServiceInterface;
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
@@ -19,7 +18,7 @@ class ServerController extends Controller
 
     public function __construct(ServerServiceInterface $serverService)
     {
-        //$this->middleware('jwt.auth');
+        $this->middleware('jwt.auth');
 
         $this->serverService = $serverService;
     }
