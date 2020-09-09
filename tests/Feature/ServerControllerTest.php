@@ -391,9 +391,6 @@ class ServerControllerTest extends TestCase
      */
     public function testCannotGetServersWhenRequestValidationFails(): void
     {
-        /** @var Server $server */
-        $server = factory(Server::class)->create();
-
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->token,
         ])->json('GET', '/api/servers?hard_disk_type=saadta&location=RotterdamRot-01&ram=1&storage[min]=100&storage[max]=350');
@@ -413,6 +410,31 @@ class ServerControllerTest extends TestCase
                     'hard_disk_type' => [
                         'The selected hard disk type is invalid.'
                     ]
+                ]
+            ]
+        );
+    }
+
+    /**
+     * Test index() (/api/servers?storage[]=100&storage[mx]=350)
+     */
+    public function testCannotGetServersWithStorageWhenMinMaxMissing(): void
+    {
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $this->token,
+        ])->json('GET', '/api/servers?storage[]=100&storage[mx]=350');
+
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+
+        $response->assertJson(
+            [
+                'error' => [
+                    'storage.min' => [
+                        'The storage.min field is required when storage is present.'
+                    ],
+                    'storage.max' => [
+                        'The storage.max field is required when storage is present.',
+                    ],
                 ]
             ]
         );

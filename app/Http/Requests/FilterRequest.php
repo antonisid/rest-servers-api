@@ -22,6 +22,8 @@ class FilterRequest extends FormRequest
         return [
             'storage' => 'array|in:0,250,1000,2000,3000,4000,8000,12000,24000,48000,72000',
             'storage.*' => 'integer',
+            'storage.min' => 'required_with:storage',
+            'storage.max' => 'required_with:storage',
             'ram' => 'array|in:2,4,8,12,16,24,32,48,64,96',
             'ram.*' => 'integer',
             'hard_disk_type' => 'string|in:ssd,sata,sas',
