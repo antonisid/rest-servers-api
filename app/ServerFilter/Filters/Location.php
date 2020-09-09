@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Builder;
 
 class Location implements Filter
 {
-    public static function apply(Builder $builder, $value): Builder
+    public static function apply(Builder $query, $value): Builder
     {
-        return $builder->where('location', $value);
+        return $query->where('location', $value);
     }
 }

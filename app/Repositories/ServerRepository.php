@@ -37,17 +37,17 @@ class ServerRepository implements ServerRepositoryInterface
      */
     public function getList(array $filters): array
     {
-       $query = ServerFilter::applyFilters($filters, $this->server->newQuery());
+        $query = ServerFilter::applyFilters($filters, $this->server->newQuery());
 
-       $servers = $query->paginate(self::PER_PAGE);
+        $servers = $query->paginate(self::PER_PAGE);
 
-       $serverDtos = [];
+        $serverDtos = [];
 
-       foreach ($servers as $server) {
-           $serverDtos[] = $this->createDto($server);
-       }
+        foreach ($servers as $server) {
+            $serverDtos[] = $this->createDto($server);
+        }
 
-       return $serverDtos;
+        return $serverDtos;
     }
 
     /**

@@ -136,7 +136,7 @@ class ServerControllerTest extends TestCase
     }
 
     /**
-     * Test index() (/servers?location=AmsterdamAMS-01)
+     * Test index() (/servers?location=RotterdamRot-01)
      */
     public function testGetServersByLocation(): void
     {
@@ -181,7 +181,7 @@ class ServerControllerTest extends TestCase
     }
 
     /**
-     * Test index() (/servers?storage[min]=1000&storage[max]=2000)
+     * Test index() (/servers?storage[min]=12000&storage[max]=24000)
      */
     public function testGetServersByStorage(): void
     {
@@ -228,7 +228,7 @@ class ServerControllerTest extends TestCase
     }
 
     /**
-     * Test index() (/servers?ram[]=8&ram[]=12)
+     * Test index() (/servers?ram[]=8&ram[]=24&ram[]=32)
      */
     public function testGetServersByRam(): void
     {
@@ -320,7 +320,7 @@ class ServerControllerTest extends TestCase
     }
 
     /**
-     * Test index() (/servers?hard_disk_type=sata)
+     * Test index() (/servers?hard_disk_type=sata&location=RotterdamRot-01&ram[]=16&storage[min]=3000&storage[max]=8000)
      */
     public function testGetServersWithAllFiltersApplied(): void
     {
@@ -364,6 +364,9 @@ class ServerControllerTest extends TestCase
         $this->assertCount(1, $response['items']);
     }
 
+    /**
+     * Test index()
+     */
     public function testSendRequestWithWrongToken(): void
     {
         /** @var Server $server */
@@ -376,6 +379,9 @@ class ServerControllerTest extends TestCase
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
     }
 
+    /**
+     * Test index()
+     */
     public function testSendRequestWithoutToken(): void
     {
         /** @var Server $server */

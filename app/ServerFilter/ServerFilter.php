@@ -15,9 +15,7 @@ class ServerFilter
      */
     public static function applyFilters(array $filters, Builder $query): Builder
     {
-        $query = static::applyFiltersFromRequest($filters, $query);
-
-        return $query;
+        return static::applyFiltersFromRequest($filters, $query);
     }
 
     /**

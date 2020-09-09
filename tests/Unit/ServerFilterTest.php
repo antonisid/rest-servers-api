@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Tests\Unit;
 
@@ -14,7 +15,7 @@ class ServerFilterTest extends TestCase
      *
      * @dataProvider dataSet
      */
-    public function testApplyFiltersFromRequest(array $input, array $expected)
+    public function testApplyFiltersFromRequest(array $input, array $expected): void
     {
         $query = ServerFilter::applyFilters($input, (new Server())->newQuery());
 

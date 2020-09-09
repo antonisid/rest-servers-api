@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Tests\Feature;
 
@@ -50,6 +51,28 @@ class UserControllerTest extends TestCase
 
         $response->assertStatus(Response::HTTP_OK);
         $response->assertSee('token');
+    }
+
+    /**
+     * Test login()
+     */
+    public function testCannotLoginWhenInputValidationFails(): void
+    {
+        $user = factory(User::class)->make();
+
+        $this->json('POST', '/api/register', [
+            'name' => $user->name,
+            'email' => $user->email,
+            'password' => $user->password,
+            'password_confirmation' => $user->password
+        ]);
+
+        $response = $this->json('POST', '/api/login', [
+            'email' => $user->email,
+        ]);
+
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $response->assertDontSee('token');
     }
 
     /**

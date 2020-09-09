@@ -7,9 +7,9 @@ use Illuminate\Database\Eloquent\Builder;
 interface Filter
 {
     /**
-     * @param Builder $builder
+     * @param Builder $query
      * @param $value
      * @return Builder
      */
-    public static function apply(Builder $builder, $value): Builder;
+    public static function apply(Builder $query, $value): Builder;
 }

@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Builder;
 
 class Ram implements Filter
 {
-    public static function apply(Builder $builder, $value): Builder
+    public static function apply(Builder $query, $value): Builder
     {
-        return $builder->whereIn('ram_capacity', $value);
+        return $query->whereIn('ram_capacity', $value);
     }
 }

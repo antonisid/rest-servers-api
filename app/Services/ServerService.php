@@ -29,9 +29,9 @@ class ServerService implements ServerServiceInterface
      */
     public function getServers(array $filters): array
     {
-        $serversDtos = $this->serverRepository->getList($filters);
+        $serverDtos = $this->serverRepository->getList($filters);
 
-        return $this->serverTransformer->transformList(...$serversDtos);
+        return $this->serverTransformer->transformList(...$serverDtos);
     }
 
     /**
@@ -39,8 +39,8 @@ class ServerService implements ServerServiceInterface
      */
     public function getServer(int $id): array
     {
-        $assetDto = $this->serverRepository->get($id);
+        $serverDto = $this->serverRepository->get($id);
 
-        return $this->serverTransformer->transform($assetDto);
+        return $this->serverTransformer->transform($serverDto);
     }
 }

@@ -29,9 +29,9 @@ class ServerController extends Controller
      */
     public function index(FilterRequest $request): JsonResponse
     {
-        $server = $this->serverService->getServers($request->all());
+        $servers = $this->serverService->getServers($request->all());
 
-        return response()->json(['items' => $server], Response::HTTP_OK);
+        return response()->json(['items' => $servers], Response::HTTP_OK);
     }
 
     /**
